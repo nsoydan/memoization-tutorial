@@ -6,6 +6,7 @@ const MyButton = lazy(() => import("./MyButton"));
 function App() {
   const [num, setNum] = useState(10);
   const [logValue, setLogvalue] = useState("");
+  const [showingLogValue, setShowingLogValue] = useState("");
   const fibValue = useMemo(() => {
     console.log("fibValue calculated");
     return fib(num);
@@ -28,34 +29,32 @@ function App() {
 
   // useCallback
 
-  const onClickLog = useCallback(
-    (e) => {
-      e.preventDefault();
-      console.log(logValue);
-    },
-    [logValue]
-  );
+  const onClickLog = useCallback(() => {
+    setShowingLogValue(logValue);
+  }, [logValue]);
 
   return (
     <div className="App">
-      <h1>
+      <h1 className="text-5xl m-2">
         Fib of {num} is {fibValue}
       </h1>
-      <input
+      <input className="m-2 text-black rounded-lg"
         type="number"
         value={num}
         onChange={(event) => setNum(parseInt(event.target.value))}
       />
-      <input
+      <input className="m-2 text-black rounded-lg"
         type="text"
         value={logValue}
         onChange={(event) => setLogvalue(event.target.value)}
       />
       {logValue.length > 0 ? (
         <Suspense fallback={<div>Loading</div>}>
-          <MyButton onClick={onClickLog}>Log Value</MyButton>
+          <MyButton className="bg-slate-200 rounded-lg" onClick={onClickLog}>Log Value</MyButton>
         </Suspense>
       ) : null}
+
+      <p> show logValue when clicked : {showingLogValue} </p>
     </div>
   );
 }
